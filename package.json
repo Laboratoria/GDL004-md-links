@@ -1,0 +1,27 @@
+{
+  "name": "gdl004-md-links",
+  "version": "1.0.0",
+  "description": "## Índice",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JossAcosta/GDL004-md-links.git"
+  },
+  "author": "",
+  "bin": {
+    "md-links": "index.js"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JossAcosta/GDL004-md-links/issues"
+  },
+  "homepage": "https://github.com/JossAcosta/GDL004-md-links#readme",
+  "dependencies": {
+    "babel": "^6.23.0",
+    "node-fetch": "^2.6.0",
+    "yargs": "^15.1.0"
+  }
+}
