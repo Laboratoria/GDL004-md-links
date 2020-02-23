@@ -6,27 +6,34 @@ const process = require('process');
 let pathUser= process.argv[2];
 let validLinks=[];
 let wrongLinks=[];
+const color = require('paint-console');
+
+var chalk = require('chalk');
+
+
 
 const validateFile = (pathUser) => {
     let extension = path.extname(pathUser);
     if (extension === '.md') {
-      console.log('Correct File extension: ' + extension);
+      console.log(chalk.rgb(30, 166, 51).underline('Correct File extension: ' + extension));
       readFile(pathUser);
     }else {
-      console.error('File no valid. Extension: ' + extension)
+      console.error('File no valid extension: ' + extension)
     }
   }
 
   const readFile = pathUser => {
     fs.readFile(pathUser, 'utf8', (err, data) => {
       if (!err) {
-        const expression = /(https?:\/\/[^\s]+)/g;
+        const expression = /(https?:\/\/[^\s\)]+)/g;
         const regex = new RegExp(expression);
          const links = data.match(regex);
+         if(links){
          mapLoop(links);
 
         return links;
-
+         } else{
+           console.error('No URLs to validate ')}
       } else {
         console.error(error.message);
       }
@@ -43,34 +50,37 @@ const mapLoop = async (arr) => {
       return wrongLinks.push( statusUrl.url)
     }
     } catch (error){
-     // console.error('No valido');
+      console.error('Could not find the IP address of the server: '+ url);
     }
   } )
 
  const statusUrlsArray = await Promise.all(promises)
  //console.table(statusUrlsArray)
  if (process.argv[3] === '--validate') {
- console.group('Validate Links');
+ console.group(chalk.bold.rgb(30, 166, 51).inverse('Validate Links'));
         console.table(validLinks);
  console.groupEnd('Validate Links');
 
- console.group('\n' + ' Broken Links');
+ console.group(chalk.bold.rgb(255, 5, 5).inverse('\n' + ' Broken Links'));
     console.table(wrongLinks);
  console.groupEnd('Broken Links');
  }
  else if (process.argv[3] === '--stats' && process.argv[4] === '--validate') {
 
-  console.group('Stats Links BROKEN/VALID');
-    console.table('Total: ' + arr.length + '\n' + 'Unique: ' + validLinks.length);
-    console.table('Broken: ' + wrongLinks.length);
-  console.groupEnd('Valid Links');
+  console.group(chalk.bold.rgb(255, 255, 255).inverse('Stats Links BROKEN/VALID'));
+    console.table(chalk.bold.rgb(245, 218, 15)('Total: ' + arr.length ));
+    console.table(chalk.rgb(30, 166, 51)('Unique: ' + validLinks.length))
+    console.table(chalk.rgb(255, 5, 5)('Broken: ' + wrongLinks.length));
+  console.groupEnd('Stats Links BROKEN/VALID');
 
 }
 else if (process.argv[3] === '--stats') {
-console.group('Stats Links ');
-      console.table('Total: ' + arr.length + '\n' + 'Unique: ' + validLinks.length);
-console.groupEnd('Valid Links');
+console.group(chalk.bold.rgb(255, 255, 255).inverse('Stats Links '));
+      console.table(chalk.bold.rgb(245, 218, 15)('Total: ' + arr.length ));
+      console.table(chalk.rgb(30, 166, 51)( 'Unique: ' + validLinks.length));
+console.groupEnd('Stats Links ');
 }
 }
 
    validateFile(pathUser);
+
