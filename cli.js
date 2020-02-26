@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 const mdLink = require('./utils.js'),
       process = require('process');
       chalk = require('chalk');
@@ -21,23 +19,22 @@ async function mdLinks(pathUser, options){
   }
           if(options === '--stats'){
               const stats = await mdLink.statsLinks(getLinksArray)
-              return  {'TOTAL' : stats.TOTAL, 'UNIQUE': stats.UNIQUE};
+              console.log({'TOTAL' : stats.TOTAL, 'UNIQUE': stats.UNIQUE});
              } else if(options === '--validate'){
               const wrongLinks = await mdLink.validateLinks(getLinksArray);
               const getLinksText = await mdLink.getLinksText(pathFile)
               const showLinksText= await mdLink.showLinksText(getLinksText)
               const showStatus = await mdLink.getStatus(showLinksText);
-              return {'ok':showStatus,'bad':wrongLinks.wrongLinks};
+              console.log({'ok':showStatus,'bad':wrongLinks.wrongLinks});
              } else if(options === '--validate--stats'){
                const stats = await mdLink.statsLinks(getLinksArray)
-               return stats;
+              console.log(stats);
             } else {
               const getLinksText = await mdLink.getLinksText(pathFile)
               const showLinksText= await mdLink.showLinksText(getLinksText)
-              return showLinksText;
+              console.log(showLinksText);
             }
 }
-mdLinks(pathUser, options)
- .then(res => console.log(res));
 
+mdLinks(pathUser, options)
 

@@ -1,14 +1,11 @@
 #!/usr/bin/env node
-const fs = require('fs');
-const path = require('path');
-const fetch = require('node-fetch');
-const process = require('process');
+const fs = require('fs'),
+      path = require('path'),
+      fetch = require('node-fetch'),
+      process = require('process'),
+      mdLink = require('./utils.js')
+      chalk = require('chalk');
 let pathUser= process.argv[2];
-let validLinks=[];
-let wrongLinks=[];
-const color = require('paint-console');
-
-var chalk = require('chalk');
 
 
 
@@ -41,20 +38,22 @@ const validateFile = (pathUser) => {
   }
 
 const mapLoop = async (arr) => {
+  let validLinks=[];
+  let wrongLinks=[];
   const promises = arr.map( async url => {
     try{
     const  statusUrl = await fetch(url)
     if(statusUrl.status < 400){
-     return validLinks.push( statusUrl.url)
+     return validLinks.push( {HREF:statusUrl.url, STATUS:statusUrl.status})
     } else {
-      return wrongLinks.push( statusUrl.url)
+      return wrongLinks.push({HREF:statusUrl.url, STATUS:statusUrl.status})
     }
     } catch (error){
       console.error('Could not find the IP address of the server: '+ url);
     }
   } )
 
- const statusUrlsArray = await Promise.all(promises)
+  await Promise.all(promises)
  //console.table(statusUrlsArray)
  if (process.argv[3] === '--validate') {
  console.group(chalk.bold.rgb(30, 166, 51).inverse('Validate Links'));
@@ -79,6 +78,9 @@ console.group(chalk.bold.rgb(255, 255, 255).inverse('Stats Links '));
       console.table(chalk.bold.rgb(245, 218, 15)('Total: ' + arr.length ));
       console.table(chalk.rgb(30, 166, 51)( 'Unique: ' + validLinks.length));
 console.groupEnd('Stats Links ');
+}
+else{
+
 }
 }
 
